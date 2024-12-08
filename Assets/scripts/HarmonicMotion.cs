@@ -6,6 +6,7 @@ public class HarmonicMotion : MonoBehaviour
     public float amplitude = 0.1f;
     public float frequency = 0.2f;
     public float waveLength = 1.5f;
+    public float phaseAngle = 0f;
     Mesh mesh;
     Vector3[] vertices;
 
@@ -24,7 +25,7 @@ public class HarmonicMotion : MonoBehaviour
             vertices[i].y =
                 amplitude
                 * Mathf.Sin(
-                    2 * Mathf.PI / waveLength * vertices[i].x - 2 * Mathf.PI * frequency * Time.time
+                    2 * Mathf.PI / waveLength * vertices[i].x - 2 * Mathf.PI * frequency * Time.time + phaseAngle
                 );
         }
 
