@@ -4,12 +4,10 @@ using UnityEngine.AI;
 
 public class move : MonoBehaviour
 {
-    //[SerializeField] Transform target;
-    //[SerializeField] Transform target2;
 
-    GameObject target1;
-    GameObject target2;
-    GameObject target3;
+    GameObject targetFood;
+    GameObject targetPay;
+    GameObject targetOut;
 
     bool uppdateTrajektory1 = true;
     bool uppdateTrajektory2 = false;
@@ -26,11 +24,11 @@ public class move : MonoBehaviour
     void Start()
     {
         atstartTime = Time.time;
-        target1 = GameObject.FindWithTag("mat");
-        target2 = GameObject.FindWithTag("matbord");
-        target3 = GameObject.FindWithTag("dörr");
+        targetFood = GameObject.FindWithTag("mat");
+        targetPay = GameObject.FindWithTag("kassa");
+        targetOut = GameObject.FindWithTag("dörr");
         //Får automatiskt sin första target
-        agent.SetDestination(target1.transform.position);
+        agent.SetDestination(targetFood.transform.position);
         uppdateTrajektory1 = true;
         
     }
@@ -38,33 +36,33 @@ public class move : MonoBehaviour
     // ifall upptagen byts målet och ifall det int fins lediga mål så väntas det på ett ledigt mål av korrekt typ
     private void Update() 
     {
-        if(target1.tag != "mat" && uppdateTrajektory1 || target1.tag == "nothing" && uppdateTrajektory1)
+        if(targetFood.tag != "mat" && uppdateTrajektory1 || targetFood.tag == "nothing" && uppdateTrajektory1)
         {
             StopMoveing();
-            target1 = GameObject.FindWithTag("mat");
-            if(target1 != null)
+            targetFood = GameObject.FindWithTag("mat");
+            if(targetFood != null)
             {
                 agent.isStopped = false;
-                agent.SetDestination(target1.transform.position); 
+                agent.SetDestination(targetFood.transform.position); 
             }
             else
             {
-                target1 = GameObject.FindWithTag("nothing");
+                targetFood = GameObject.FindWithTag("nothing");
             }
         }
 
-        if(target2.tag != "matbord" && uppdateTrajektory2 || target2.tag == "nothing" && uppdateTrajektory2)
+        if(targetPay.tag != "kassa" && uppdateTrajektory2 || targetPay.tag == "nothing" && uppdateTrajektory2)
         {
             StopMoveing();
-            target2 = GameObject.FindWithTag("matbord");
-            if(target2 != null)
+            targetPay = GameObject.FindWithTag("kassa");
+            if(targetPay != null)
             {
                 agent.isStopped = false;
-                agent.SetDestination(target2.transform.position); 
+                agent.SetDestination(targetPay.transform.position); 
             }
             else
             {
-                target2 = GameObject.FindWithTag("nothing");
+                targetPay = GameObject.FindWithTag("nothing");
             }
         }     
     }
@@ -75,16 +73,16 @@ public class move : MonoBehaviour
         if(other.gameObject.tag == "mat")
         {   
             uppdateTrajektory1 = false;
-            changeTag(other.gameObject);
-            StartCoroutine(rutin(other.gameObject));    
+            changeAllTags(other.gameObject, "full");
+            StartCoroutine(atFoodStation(other.gameObject));    
         } 
         
-        if(other.gameObject.tag == "matbord")
+        if(other.gameObject.tag == "kassa")
         {   
             uppdateTrajektory2 = false;
-            changeTag(other.gameObject);
+            changeAllTags(other.gameObject, "full");
             StopAllCoroutines();
-            StartCoroutine(rutin2(other.gameObject));   
+            StartCoroutine(atPayStation(other.gameObject));   
         }
         
         if(other.gameObject.tag == "dörr")
@@ -97,7 +95,8 @@ public class move : MonoBehaviour
     }
 
     // efter att köaren kommit fram till sit mål, väntar den vid målet för en kort stund före den fortsätter rill nästa typs av mål
-    IEnumerator rutin(GameObject other)
+    //Då agenten har kommit fram till mat pungten börjar denhär corutinen
+    IEnumerator atFoodStation(GameObject other)
     {
         StopMoveing();
         yield return new WaitForSeconds(0.5f);
@@ -106,12 +105,13 @@ public class move : MonoBehaviour
         yield return new WaitForSeconds(randomNumber());
 
         agent.isStopped = false;
-        agent.SetDestination(target2.transform.position);
+        agent.SetDestination(targetPay.transform.position);
         uppdateTrajektory2 = true;
-        changeTagBackMat(other);
+        changeAllTags(other, "mat");
     }
 
-    IEnumerator rutin2(GameObject other)
+    // Då agentten kommer fram till kassan kommer denhär corutinen att börja
+    IEnumerator atPayStation(GameObject other)
     {
         StopMoveing();
         yield return new WaitForSeconds(0.5f);
@@ -120,8 +120,8 @@ public class move : MonoBehaviour
         yield return new WaitForSeconds(randomNumber());
 
         agent.isStopped = false;
-        agent.SetDestination(target3.transform.position);
-        changeTagBackMatbord(other);
+        agent.SetDestination(targetOut.transform.position);
+        changeAllTags(other, "kassa");
     }
 
     //Funktioner som används i koden ovan
@@ -137,24 +137,8 @@ public class move : MonoBehaviour
         return Random.Range(2,6);
     }
 
-    void changeTag(GameObject objekt)
+    void changeAllTags(GameObject objekt, string newTag)
     {
-        objekt.tag = "full";
-    }
-
-    void changeTagBackMat(GameObject objekt)
-    {
-        objekt.tag = "mat";
-    }
-
-    void changeTagBackMatbord(GameObject objekt)
-    {
-        objekt.tag = "matbord";
-    }
-
-    IEnumerator fundera(GameObject other)
-    {
-        StopMoveing();
-        yield return new WaitForSeconds(1f); 
+        objekt.tag = newTag;
     }
 }
