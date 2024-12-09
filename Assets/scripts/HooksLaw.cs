@@ -10,11 +10,10 @@ public class HooksLaw : MonoBehaviour
     Vector3[] vertices;
     Vertex[] vertexPoints = new Vertex[81];
 
-    void Start()
-    {
+    void Awake() {
         mesh = GetComponent<MeshFilter>().mesh;
         vertices = mesh.vertices;
-        InitiateVertexPoints();
+        InitializeVertexArray();
     }
 
     void FixedUpdate()
@@ -52,7 +51,7 @@ public class HooksLaw : MonoBehaviour
         mesh.RecalculateBounds();
     }
 
-    void InitiateVertexPoints()
+    void InitializeVertexArray()
     {
         int nextEdge = 21;
         for (int i = 12, j = 0; i < 110; i++)

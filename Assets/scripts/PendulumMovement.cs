@@ -10,25 +10,28 @@ public class Pendel : MonoBehaviour
     float angularVelocity = 0;
     float gravity = -9.82f;
     float radius;
-    GameObject Connection;
+    [SerializeField] private GameObject Connection;
     LineRenderer Line;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
-        Connection = GameObject.Find("Rope");
-
-        // line setup
         Line = new GameObject("Line").AddComponent<LineRenderer>();
+        InitializeLineRenderer();
+    }
+
+    void InitializeLineRenderer()
+    {
+        Line.material = new Material(Shader.Find("Sprites/Default"));
         Line.material.SetColor("_Color", Color.black);
         Line.startWidth = 0.1f;
         Line.endWidth = 0.1f;
+    }
 
-        // inital radius
+    void Start()
+    {
         radius = Vector3.Distance(transform.position, Connection.transform.position);
     }
 
-    // Update is called once per frame
     void Update()
     {
         // winch the pendulum up and down

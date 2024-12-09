@@ -10,14 +10,12 @@ public class HarmonicMotion : MonoBehaviour
     Mesh mesh;
     Vector3[] vertices;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
+    void Awake()
+    {    
         mesh = GetComponent<MeshFilter>().mesh;
         vertices = mesh.vertices;
     }
 
-    // Update is called once per frame
     void Update()
     {
         for (int i = 0; i < vertices.Length; i++)

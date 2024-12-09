@@ -288,6 +288,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Speed: 10
   RotationSpeed: 60
+--- !u!1 &577541331 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3957344894022097484, guid: 12e4551279a46ea409e5d842a6626e9a, type: 3}
+  m_PrefabInstance: {fileID: 1974156225}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &829740528
 GameObject:
   m_ObjectHideFlags: 0
@@ -528,6 +533,7 @@ MonoBehaviour:
   minimumWinchLength: 1
   maximumWinchLength: 10
   damping: 0.999
+  Connection: {fileID: 577541331}
 --- !u!4 &1485397539 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4306582432695062742, guid: 12e4551279a46ea409e5d842a6626e9a, type: 3}
